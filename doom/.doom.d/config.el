@@ -200,3 +200,5 @@
          :target (file+head "%<%Y-%m-%d>.org"
                             "#+title: %<%Y-%m-%d>\n"))))
   (org-roam-db-autosync-mode))
+
+(setq display-line-numbers-type 'relative)
