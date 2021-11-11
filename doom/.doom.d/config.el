@@ -202,3 +202,7 @@
   (org-roam-db-autosync-mode))
 
 (setq display-line-numbers-type 'relative)
+
+(set-frame-parameter (selected-frame) 'alpha '(95))
+
+(add-to-list 'default-frame-alist '(alpha 95))
