@@ -1,0 +1,6 @@
+[submodule "tmux/.tmux/plugins/tpm"]
+	path = tmux/.tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm
+[submodule "vim/.vim/pack/themes/start/dracula"]
+	path = vim/.vim/pack/themes/start/dracula
+	url = https://github.com/dracula/vim.git
