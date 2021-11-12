@@ -4,3 +4,6 @@
 [submodule "vim/.vim/pack/themes/start/dracula"]
 	path = vim/.vim/pack/themes/start/dracula
 	url = https://github.com/dracula/vim.git
+[submodule "tmux/.tmux/plugins/tmux-sensible"]
+	path = tmux/.tmux/plugins/tmux-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible.git
