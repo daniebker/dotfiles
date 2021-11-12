@@ -3,4 +3,5 @@
 *.log
 tmp/
 
-/tmux/.tmux/plugins/tmux/
+tmux/.tmux/plugins/*
+!tmux/.tmux/plugins/tpm/
