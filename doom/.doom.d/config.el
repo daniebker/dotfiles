@@ -90,7 +90,7 @@
                           '((:log t)
                             (:name "Past Scheduled"
                              :scheduled past
-                             :order 98)
+                             :order 2)
                             (:name "Next to do"
                                :todo "NEXT"
                                :order 1)
