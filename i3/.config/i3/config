@@ -13,7 +13,7 @@
 # disable window titlebars
 for_window [class="^.*"] border pixel 0
 
-gaps inner 6
+gaps inner 10
 gaps outer 2
 
 set $mod Mod4
@@ -186,3 +186,6 @@ bindsym $mod+r mode "resize"
 bar {
         status_command i3status
 }
+
+exec_always --no-startup-id feh --bg-fill --randomize ~/wallpapers/*
+exec_always --no-startup-id picom --config ~/.config/picom.conf
