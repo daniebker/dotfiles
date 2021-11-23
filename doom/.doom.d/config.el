@@ -128,7 +128,9 @@
 
 (add-to-list 'org-modules 'org-habit t)
 
-(after! org-roam
+(use-package! org-roam
+  :after org
+  :config
   (setq
    org-roam-directory "~/org-roam"              ;; Set the org-roam directory
    org-roam-dailies-directory "daily/"          ;; Required to use org roam daily notes
