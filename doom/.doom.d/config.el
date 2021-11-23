@@ -63,76 +63,14 @@
 ;; ORG
 ;;;;;;;;
 
-(use-package! org-super-agenda
-  :after org-agenda
-  :init
-  (setq org-agenda-skip-scheduled-if-done t
-      org-agenda-skip-deadline-if-done t
-      org-agenda-include-deadlines t
-      org-agenda-block-separator nil
-      org-agenda-compact-blocks t
-      org-agenda-start-day nil ;; i.e. today
-      org-agenda-span 1
-      org-agenda-start-with-log-mode t
-      org-agenda-start-on-weekday nil)
-  (setq org-agenda-custom-commands
-        '(("c" "Super view"
-           ((agenda "" ((org-agenda-overriding-header "")
-                        (org-super-agenda-groups
-                         '((:name "Today"
-                                  :time-grid t
-                                  :date today
-                                  :scheduled today
-                                  :order 1)
-                           (:discard (:anything))))))
-            (alltodo "" ((org-agenda-overriding-header "")
-                         (org-super-agenda-groups
-                          '((:log t)
-                            (:name "Past Scheduled"
-                             :scheduled past
-                             :order 2)
-                            (:name "Next to do"
-                               :todo "NEXT"
-                               :order 1)
-                            (:name "In progress"
-                               :todo "STRT"
-                               :order 2)
-                            (:name "Important"
-                               :priority "A"
-                               :order 6)
-                            (:name "Due Today"
-                               :deadline today
-                               :order 2)
-                            (:name "Habits"
-                             :habit t)
-                            (:name "Stale"
-                             :todo "WAIT"
-                             :order 3)
-                            (:name "Due Soon"
-                               :deadline future
-                               :order 3)
-                            (:name "Scheduled Soon"
-                               :scheduled future
-                               :order 8)
-                            (:name "Overdue"
-                               :deadline past
-                               :order 7)
-                            (:name "Goals"
-                             :todo "GOAL"
-                             :order 10)
-                            (:name "Unscheduled"
-                               :date nil
-                               :order 9)
-                            (:discard (:not (:todo "TODO") :anything))))))))))
-  :config
-  (org-super-agenda-mode))
 
 (use-package! org-archive
   :after org
   :config
   (setq org-archive-location "archive.org::datetree/"))
 
-(after! org
+(use-package! org
+  :config
   (setq
    org-log-into-drawer t
    org-todo-keywords
