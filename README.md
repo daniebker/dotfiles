@@ -10,6 +10,16 @@ This repo uses stow to manage dotfiles.
 
 This will add a `.vim` folder one directory up from where you checked out the repository.
 
+If you get an error like
+
+```
+~/.dotfiles $ stow vim
+WARNING! stowing vim would cause conflicts:
+  * existing target is neither a link nor a directory: .vim
+```
+
+Its because you have an exisitng folder at ~/.vim. Make a back up of it and try again `mv ~/.vim ~/.vim.v0`
+
 ## Required apps
 
 - i3-gaps
