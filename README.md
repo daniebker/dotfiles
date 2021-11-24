@@ -1,3 +1,5 @@
+This repo uses stow to manage dotfiles.
+
 ## Required apps
 
 - i3-gaps
