@@ -146,3 +146,32 @@
 (set-frame-parameter (selected-frame) 'alpha '(95))
 
 (add-to-list 'default-frame-alist '(alpha 95))
+
+
+(use-package org-gtd
+  :after org
+  :demand t
+  :config
+  (setq
+   org-agenda-files `(,org-gtd-directory)
+   ;; a useful view to see what can be accomplished today
+   org-agenda-custom-commands '(("g" "Scheduled today and all NEXT items" ((agenda "" ((org-agenda-span 1))) (todo "NEXT"))))
+   org-capture-templates
+      `(("i" "Inbox"
+         entry (file ,(org-gtd-inbox-path))
+         "* %?\n%U\n\n  %i"
+         :kill-buffer t)
+        ("l" "Todo with link"
+         entry (file ,(org-gtd-inbox-path))
+         "* %?\n%U\n\n  %i\n  %a"
+         :kill-buffer t))))
+
+;; this allows you use `(,org-gtd-directory) for your agenda files
+(use-package org-agenda
+  :ensure nil
+  :after org-gtd)
+
+;; this allows you to use (org-gtd-inbox-path) for your capture destinations
+(use-package org-capture
+  :ensure nil
+  :after org-gtd)
