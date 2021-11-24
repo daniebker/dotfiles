@@ -3,12 +3,25 @@
 This repo uses stow to manage dotfiles.
 
 1. Use your package manager to install `stow`
-2. `git clone https://github.com/daniebker/dotfiles.git ~/.dotfiles`
-3. `cd .dotfiles`
-4. `git submodule update --init --recursive`
-5. `stow vim`
+
+```sh
+git clone https://github.com/daniebker/dotfiles.git ~/.dotfiles`
+cd .dotfiles
+git submodule update --init --recursive
+stow vim
+```
 
 This will add a `.vim` folder one directory up from where you checked out the repository.
+
+If you get an error like
+
+```
+~/.dotfiles $ stow vim
+WARNING! stowing vim would cause conflicts:
+  * existing target is neither a link nor a directory: .vim
+```
+
+Its because you have an exisitng folder at ~/.vim. Make a back up of it and try again `mv ~/.vim ~/.vim.v0`
 
 ## Required apps
 
