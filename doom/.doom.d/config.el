@@ -154,8 +154,13 @@
   :config
   (setq
    org-agenda-files `(,org-gtd-directory)
-   ;; a useful view to see what can be accomplished today
-   org-agenda-custom-commands '(("g" "Scheduled today and all NEXT items" ((agenda "" ((org-agenda-span 1))) (todo "NEXT"))))
+   org-agenda-custom-commands '(
+                                ("g" "Scheduled today and all NEXT items"  ;; a useful view to see what can be accomplished today
+                                 ((agenda "" ((org-agenda-span 1)))
+                                  (todo "NEXT")
+                                  (todo "STRT")
+                                  (todo "WAIT")))
+                                 )
    org-capture-templates
       `(("i" "Inbox"
          entry (file ,(org-gtd-inbox-path))
