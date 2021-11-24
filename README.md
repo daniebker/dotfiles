@@ -1,4 +1,14 @@
+## Getting Started
+
 This repo uses stow to manage dotfiles.
+
+1. Use your package manager to install `stow`
+2. `git clone https://github.com/daniebker/dotfiles.git ~/.dotfiles`
+3. `cd .dotfiles`
+4. `git submodule update --init --recursive`
+5. `stow vim`
+
+This will add a `.vim` folder one directory up from where you checked out the repository.
 
 ## Required apps
 
