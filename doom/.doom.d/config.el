@@ -159,7 +159,8 @@
                                  ((agenda "" ((org-agenda-span 1)))
                                   (todo "NEXT")
                                   (todo "STRT")
-                                  (todo "WAIT")))
+                                  (todo "WAIT")
+                                  (todo "GOAL")))
                                  )
    org-capture-templates
       `(("i" "Inbox"
