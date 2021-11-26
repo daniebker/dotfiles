@@ -190,3 +190,4 @@ bar {
 exec_always --no-startup-id feh --bg-fill --randomize ~/wallpapers/*
 exec_always --no-startup-id picom --config ~/.config/picom.conf
 exec_always --no-startup-id udiskie                                     # automount USBs like a boss
+exec_always --no-startup-id syncthing 					# sync between computers
