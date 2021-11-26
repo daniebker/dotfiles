@@ -148,7 +148,7 @@
 (add-to-list 'default-frame-alist '(alpha 95))
 
 
-(use-package org-gtd
+(use-package! org-gtd
   :after org
   :demand t
   :config
