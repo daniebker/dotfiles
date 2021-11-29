@@ -148,14 +148,20 @@
 (add-to-list 'default-frame-alist '(alpha 95))
 
 
-(use-package org-gtd
+(use-package! org-gtd
   :after org
   :demand t
   :config
   (setq
    org-agenda-files `(,org-gtd-directory)
-   ;; a useful view to see what can be accomplished today
-   org-agenda-custom-commands '(("g" "Scheduled today and all NEXT items" ((agenda "" ((org-agenda-span 1))) (todo "NEXT"))))
+   org-agenda-custom-commands '(
+                                ("g" "Scheduled today and all NEXT items"  ;; a useful view to see what can be accomplished today
+                                 ((agenda "" ((org-agenda-span 1)))
+                                  (todo "NEXT")
+                                  (todo "STRT")
+                                  (todo "WAIT")
+                                  (todo "GOAL")))
+                                 )
    org-capture-templates
       `(("i" "Inbox"
          entry (file ,(org-gtd-inbox-path))
@@ -176,10 +182,9 @@
   :ensure nil
   :after org-gtd)
 
-(map! :after org
-      :map org-mode-map
-      :localleader
-       :prefix ("G" . "gtd ")
+(after! org
+ (map! :localleader
+       (:prefix ("G" . "gtd")
         :desc "Capture" "c" #'org-gtd-capture
         :desc "Agenda list" "a" #'org-agenda-list
         :desc "Process inbox" "p" #'org-gtd-process-inbox
