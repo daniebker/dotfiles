@@ -50,3 +50,7 @@
 ;(unpin! t)
 
 (package! org-gtd)
+(package! tree-sitter)
+(package! tree-sitter-langs)
+(package! refactoring
+  :recipe (:local-repo "~/src/emacs/refactoring"))

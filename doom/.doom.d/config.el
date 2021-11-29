@@ -176,12 +176,15 @@
   :ensure nil
   :after org-gtd)
 
-(map! :leader
-      (:prefix-map ("e" . "org")
-       (:prefix ("g" . "gtd ")
+(map! :after org
+      :map org-mode-map
+      :localleader
+       :prefix ("G" . "gtd ")
         :desc "Capture" "c" #'org-gtd-capture
         :desc "Agenda list" "a" #'org-agenda-list
         :desc "Process inbox" "p" #'org-gtd-process-inbox
         :desc "All next actions" "n" #'org-gtd-show-all-next
         :desc "Stuck projects" "s" #'org-gtd-show-stuck-projects
-        :desc "Clarify and finalise" "f" #'org-gtd-clarify-finalize)))
+        :desc "Clarify and finalise" "f" #'org-gtd-clarify-finalize)
+
+(global-tree-sitter-mode)
