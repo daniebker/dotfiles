@@ -187,6 +187,12 @@ bar {
         status_command i3status
 }
 
+#interactive screenshot by pressing printscreen
+bindsym Print exec gnome-screenshot -i
+#crop-area screenshot by pressing Mod + printscreen
+bindsym $mod+Print exec gnome-screenshot -a
+
+# Start specific apps
 exec_always --no-startup-id feh --bg-fill --randomize ~/wallpapers/*
 exec_always --no-startup-id picom --config ~/.config/picom.conf
 exec_always --no-startup-id udiskie                                     # automount USBs like a boss
