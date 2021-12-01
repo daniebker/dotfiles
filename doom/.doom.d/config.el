@@ -156,7 +156,11 @@
    org-agenda-files `(,org-gtd-directory)
    org-agenda-custom-commands '(
                                 ("g" "Scheduled today and all NEXT items"  ;; a useful view to see what can be accomplished today
-                                 ((agenda "" ((org-agenda-span 1)))
+                                 ((agenda "" (
+                                        (org-agenda-span 1)
+                                        (org-agenda-start-day "-0d")
+                                        (org-agenda-start-on-weekday nil)
+                                        (org-deadline-warning-days 7)))
                                   (todo "NEXT")
                                   (todo "STRT")
                                   (todo "WAIT")
