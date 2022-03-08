@@ -1,0 +1,4 @@
+#+TITLE: Readme
+
+** Enabling PDF tools
+ When loading PDFs if the output is garbage text you probably need to build =epdfinfo= since pdf tools hasn't done it automatically. From inside emacs run ~M-x pdf-tools-install~. Windows users follow the instructions on the [[https://github.com/hlissner/doom-emacs/tree/develop/modules/tools/pdf#building-epdfinfo-on-windows][doom readme]]
