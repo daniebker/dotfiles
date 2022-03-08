@@ -196,4 +196,8 @@
         :desc "All next actions" "n" #'org-gtd-show-all-next
         :desc "Stuck projects" "s" #'org-gtd-show-stuck-projects
         :desc "Clarify and finalise" "f" #'org-gtd-clarify-finalize))
+
 (global-tree-sitter-mode)
+
+(setq
+  scroll-margin 10)                      ;; When to start moving the buffer up or down
