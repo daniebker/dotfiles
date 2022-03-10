@@ -98,6 +98,7 @@
           ("[?]"  . +org-todo-onhold)
           ("WAIT" . +org-todo-onhold)
           ("HOLD" . +org-todo-onhold)
+          ("BACK" . +org-todo-onhold)
           ("GOAL" . +org-todo-project)
           ("NO"   . +org-todo-cancel)
           ("KILL" . +org-todo-cancel))))
