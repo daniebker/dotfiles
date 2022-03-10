@@ -88,16 +88,8 @@
            "KILL(k)" ; Task was cancelled, aborted or is no longer applicable
            "BACK(b)") ; Task was scheduled in the backlog
           (sequence
-           "[ ](T)"   ; A task that needs doing
-           "[-](S)"   ; Task is in progress
-           "[?](W)"   ; Task is being held up or paused
+           "Q(q)"
            "|"
-           "[>](P)"   ; Task is planned
-           "[X](D)")  ; Task was completed
-          (sequence
-           "?(q)"
-           "|"
-           "OKAY(o)"
            "YES(y)"
            "NO(n)"))
         org-todo-keyword-faces
@@ -201,3 +193,9 @@
 
 (setq
   scroll-margin 10)                      ;; When to start moving the buffer up or down
+
+(use-package org-trello
+  :after org
+  :config
+  (setq
+    org-trello-files '("~/gtd")))

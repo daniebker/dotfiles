@@ -52,3 +52,4 @@
 (package! org-gtd)
 (package! tree-sitter)
 (package! tree-sitter-langs)
+(package! org-trello)
