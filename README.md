@@ -61,3 +61,13 @@ ninja -C build
 sudo ninja -C install
 ```
 
+## Google Calendar set up
+
+1. Follow the instructions on the org-gal github repo to set up API credentials
+1. Add the following envs vars:
+
+``` sh
+export ORG_GCAL_CLIENT_ID
+export ORG_GCAL_CLIENT_SECRET
+export ORG_GCAL_CALENDAR_EMAIL
+```

@@ -200,3 +200,11 @@
   :config
   (setq
     org-trello-files '("~/gtd")))
+
+(use-package org-gcal
+  :after org
+  :config
+  (setq org-gcal-client-id (getenv ORG_GCAL_CLIENT_ID)
+      org-gcal-client-secret (getenv ORG_GCAL_CLIENT_SECRET)
+      org-gcal-auto-archive nil
+      org-gcal-fetch-file-alist '(((getenv ORG_GCAL_CALENDAR_EMAIL) .  "~/gtd/plan.org"))))

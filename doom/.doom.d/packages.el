@@ -53,3 +53,4 @@
 (package! tree-sitter)
 (package! tree-sitter-langs)
 (package! org-trello)
+(package! org-gcal)
