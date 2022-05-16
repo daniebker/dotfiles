@@ -54,3 +54,6 @@
 (package! tree-sitter-langs)
 (package! org-trello)
 (package! org-gcal)
+(package! olivetti)
+(unpin! org-roam)
+(package! org-roam-ui)
