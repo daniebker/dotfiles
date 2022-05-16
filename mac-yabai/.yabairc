@@ -51,8 +51,11 @@ yabai -m config window_gap                   12
 # float system preferences
 yabai -m rule --add app='^System Information$' manage=off
 yabai -m rule --add app='^System Preferences$' manage=off
+yabai -m rule --add app='^Activity Monitor$' manage=off
 yabai -m rule --add app='^Finder$' manage=off
 yabai -m rule --add title='Preferences$' manage=off
+yabai -m rule --add app="^Zoom$" space=10
+
 
 # float settings windows
 yabai -m rule --add title='Settings$' manage=off
