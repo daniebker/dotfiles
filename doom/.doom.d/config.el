@@ -111,11 +111,12 @@
   :config
 
   (setq
-   org-journal-date-prefix "#+TITLE: "
-   org-journal-time-prefix "* "
-   org-journal-date-format "%a, %Y-%m-%d"
-   org-journal-file-format "%Y-%m-%d.org"
+   org-journal-date-prefix "* "
+   org-journal-time-prefix "** "
+   org-journal-date-format "%m-%d, %a"
+   org-journal-file-format "%Y.org"
    org-journal-enable-agenda-integration t
+   org-journal-file-type 'yearly
    org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
   (add-to-list 'org-agenda-files org-journal-dir))
 
