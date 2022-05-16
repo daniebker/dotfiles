@@ -152,9 +152,9 @@
 
 (setq display-line-numbers-type 'relative)
 
-(set-frame-parameter (selected-frame) 'alpha '(95))
+(set-frame-parameter (selected-frame) 'alpha '(85))
 
-(add-to-list 'default-frame-alist '(alpha 95))
+(add-to-list 'default-frame-alist '(alpha 85))
 
 
 (use-package! org-gtd
