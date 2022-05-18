@@ -5,13 +5,6 @@ alt - j : yabai -m window --focus south
 alt - k : yabai -m window --focus north
 alt - l : yabai -m window --focus east
 
-# (alt) change focus (using arrow keys)
-
-alt - left  : yabai -m window --focus west
-alt - down  : yabai -m window --focus south
-alt - up    : yabai -m window --focus north
-alt - right : yabai -m window --focus east
-
 # shift window in current workspace
 
 alt + shift - h : yabai -m window --swap west || $(yabai -m window --display west; yabai -m display --focus west)
