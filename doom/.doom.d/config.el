@@ -174,7 +174,41 @@
                                   (todo "STRT")
                                   (todo "WAIT")
                                   (todo "GOAL")))
+                                ("w" "Daily work plan"
+                                ((agenda "" (
+                                        (org-agenda-span 1)
+                                        (org-agenda-start-day "-0d")
+                                        (org-agenda-start-on-weekday nil)
+                                        (org-agenda-sorting-strategy
+                                         (quote ((agenda time-up priority-down tag-up))))
+                                        (org-deadline-warning-days 14)))
+                                 (todo "STRT"
+                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+                                 (todo "NEXT"
+                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+                                 (todo "WAIT")
+                                 (todo "TODO")
                                  )
+                                ((org-agenda-tag-filter-preset '("+work"))))
+                                ("p" "Daily personal plan"
+                                ((agenda "" (
+                                        (org-agenda-span 1)
+                                        (org-agenda-start-day "-0d")
+                                        (org-agenda-start-on-weekday nil)
+                                        (org-agenda-sorting-strategy
+                                         (quote ((agenda time-up priority-down tag-up))))
+                                        (org-deadline-warning-days 14)))
+                                 (todo "DONE")
+                                 (todo "STRT"
+                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+                                 (todo "NEXT"
+                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+                                 (todo "WAIT")
+                                 (todo "TODO")
+                                 )
+                                ((org-agenda-tag-filter-preset '("+personal"))))
+                                )
+                                
    org-capture-templates
       `(("i" "Inbox"
          entry (file ,(org-gtd-inbox-path))
