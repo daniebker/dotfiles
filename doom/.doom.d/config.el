@@ -79,13 +79,13 @@
            "NEXT(e)"  ; The next thing to do
            "GOAL(g)"  ; A goal, which usually contains other tasks
            "STRT(s)"  ; A task that is in progress
-           "WAIT(w)"  ; Something external is holding up this task
-           "DELG(D)"  ; Task was delegated to someone else.
-           "HOLD(h)"  ; This task is paused/on hold because of me
+           "WAIT(w@)"  ; Something external is holding up this task
+           "DELG(D@)"  ; Task was delegated to someone else.
+           "HOLD(h@)"  ; This task is paused/on hold because of me
            "IDEA(i)"  ; An unconfirmed and unapproved task or notion
            "|"
-           "DONE(d)"  ; Task successfully completed
-           "KILL(k)" ; Task was cancelled, aborted or is no longer applicable
+           "DONE(d!)"  ; Task successfully completed
+           "KILL(k!)" ; Task was cancelled, aborted or is no longer applicable
            "BACK(b)") ; Task was scheduled in the backlog
           (sequence
            "Q(q)"
