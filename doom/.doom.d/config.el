@@ -106,49 +106,7 @@
 (add-to-list 'org-modules 'org-checklist)
 (setq initial-frame-alist '((top . 1) (left . 1) (width . 143) (height . 55)))
 
-(use-package! org-journal
-  :after org
-  :config
-
-  (setq
-   org-journal-date-prefix "* "
-   org-journal-time-prefix "** "
-   org-journal-date-format "%m-%d, %a"
-   org-journal-file-format "%Y.org"
-   org-journal-enable-agenda-integration t
-   org-journal-file-type 'yearly
-   org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
-  (add-to-list 'org-agenda-files org-journal-dir))
-
 (add-to-list 'org-modules 'org-habit t)
-
-(use-package! org-roam
-  :after org
-  :config
-  (setq
-   org-roam-directory "~/org-roam"              ;; Set the org-roam directory
-   org-roam-dailies-directory "daily/"          ;; Required to use org roam daily notes
-   org-roam-dailies-capture-templates           ;; Sets the capture templte for org roam dailies
-      '(("d" "default" entry
-         "* %?"
-         :target (file+head "%<%Y-%m-%d>.org"
-                            "#+title: %<%Y-%m-%d>\n"))))
-  (org-roam-db-autosync-mode))
-
-(use-package! websocket
-    :after org-roam)
-
-(use-package! org-roam-ui
-    :after org-roam ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
-;;  :hook (after-init . org-roam-ui-mode)
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
 
 (setq display-line-numbers-type 'relative)
 
@@ -156,13 +114,12 @@
 
 (add-to-list 'default-frame-alist '(alpha 85))
 
-
 (use-package! org-gtd
   :after org
   :demand t
   :config
   (setq
-   org-agenda-files `(,org-gtd-directory)
+   org-agenda-files `(org-gtd-directory)
    org-agenda-custom-commands '(
                                 ("g" "Scheduled today and all NEXT items"  ;; a useful view to see what can be accomplished today
                                  ((agenda "" (
@@ -240,13 +197,7 @@
         :desc "Stuck projects" "s" #'org-gtd-show-stuck-projects
         :desc "Clarify and finalise" "f" #'org-gtd-clarify-finalize))
 
-(global-tree-sitter-mode)
 
 (setq
   scroll-margin 10)                      ;; When to start moving the buffer up or down
 
-(use-package org-trello
-  :after org
-  :config
-  (setq
-    org-trello-files '("~/gtd")))

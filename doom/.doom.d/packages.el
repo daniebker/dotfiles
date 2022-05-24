@@ -50,9 +50,4 @@
 ;(unpin! t)
 
 (package! org-gtd)
-(package! tree-sitter)
-(package! tree-sitter-langs)
-(package! org-trello)
 (package! olivetti)
-(unpin! org-roam)
-(package! org-roam-ui)
