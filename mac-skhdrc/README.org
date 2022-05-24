@@ -1,0 +1,22 @@
+** Cheatsheet
+
+*** Place a new window at a specific location
+
+| Command          | Description                                                         |
+|------------------+---------------------------------------------------------------------|
+| ~CTRL + OPT + j~ | Sets the new window region to be below the current window           |
+| ~CTRL + OPT + k~ | Sets the new window region to be above the current window           |
+| ~CTRL + OPT + h~ | Sets the new window region to be to the left of the current window  |
+| ~CTRL + OPT + l~ | Sets the new window region to be to the right of the current window |
+
+*** Switch between windows
+| Command   | Description                                                                      |
+|-----------+----------------------------------------------------------------------------------|
+| ~OPT + j~ | Moves the current focused window to the one directly above the current           |
+| ~OPT + k~ | Moves the current focused window to the one directly below the current           |
+| ~OPT + h~ | Moves the current focused window to the one directly to the left of the current  |
+| ~OPT + j~ | Moves the current focused window to the one directly to the right of the current |
+
+*** Toggle Fullscreen
+
+~SHIFT + OPT + f~
