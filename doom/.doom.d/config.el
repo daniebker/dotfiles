@@ -73,6 +73,7 @@
   :config
   (setq
    org-log-into-drawer t
+   org-refile-targets '((org-buffer-list :maxlevel . 3 ) (org-agenda-files :maxlevel . 3))
    org-todo-keywords
         '((sequence
            "TODO(t)"  ; A task that needs doing & is ready to do
