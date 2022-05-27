@@ -86,7 +86,7 @@
            "IDEA(i)"  ; An unconfirmed and unapproved task or notion
            "|"
            "DONE(d!)"  ; Task successfully completed
-           "KILL(k!)" ; Task was cancelled, aborted or is no longer applicable
+           "KILL(k@)" ; Task was cancelled, aborted or is no longer applicable
            "BACK(b)") ; Task was scheduled in the backlog
           (sequence
            "Q(q)"
