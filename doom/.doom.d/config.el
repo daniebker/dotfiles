@@ -115,12 +115,33 @@
 
 (add-to-list 'default-frame-alist '(alpha 85))
 
+(defun my-agenda-prefix ()
+  (format "%s" (my-agenda-indent-string (org-current-level))))
+
+(defun my-agenda-indent-string (level)
+  (if (= level 1)
+      ""
+    (let ((str "\t"))
+      (while (> level 2)
+        (setq level (1- level)
+              str (concat str " ")))
+      (concat str "\\_"))))
+
+(defun my-org-skip-subtree-if-habit ()
+  "Skip an agenda entry if it has a STYLE property equal to \"habit\"."
+  (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+    (if (string= (org-entry-get nil "STYLE") "habit")
+        subtree-end
+      nil)))
+
 (use-package! org-gtd
   :after org
   :demand t
   :config
   (setq
-   org-agenda-files `(org-gtd-directory)
+   org-agenda-files `(,org-gtd-directory)
+   org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled
+   org-habit-show-all-today t
    org-agenda-custom-commands '(
                                 ("g" "Scheduled today and all NEXT items"  ;; a useful view to see what can be accomplished today
                                  ((agenda "" (
@@ -138,31 +159,38 @@
                                         (org-agenda-start-day "-0d")
                                         (org-agenda-start-on-weekday nil)
                                         (org-agenda-sorting-strategy
-                                         (quote ((agenda time-up priority-down tag-up))))
-                                        (org-deadline-warning-days 14)))
+                                         (quote ((agenda time-up priority-down))))
+                                        (org-deadline-warning-days 3)))
                                  (todo "STRT"
                                        ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-                                 (todo "NEXT"
-                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-                                 (todo "WAIT")
-                                 (todo "TODO")
+                                 (todo "TODO|GOAL|WAIT|NEXT"
+                                       ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
+                                        (org-tags-match-list-sublevels t)))
+
+                                 (todo "DONE")
                                  )
                                 ((org-agenda-tag-filter-preset '("+work"))))
-                                ("p" "Daily personal plan"
-                                ((agenda "" (
-                                        (org-agenda-span 1)
+                                ("p" "Daily personal plan"((agenda "" (
+                                        (org-agenda-span 2)
                                         (org-agenda-start-day "-0d")
                                         (org-agenda-start-on-weekday nil)
                                         (org-agenda-sorting-strategy
-                                         (quote ((agenda time-up priority-down tag-up))))
-                                        (org-deadline-warning-days 14)))
-                                 (todo "DONE")
+                                         (quote ((agenda time-up priority-down))))
+                                        (org-deadline-warning-days 3)))
                                  (todo "STRT"
                                        ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-                                 (todo "NEXT"
-                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-                                 (todo "WAIT")
-                                 (todo "TODO")
+                                 (todo "NEXT|GOAL"
+                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
+                                       (org-agenda-prefix-format " %e %(my-agenda-prefix) ")
+                                        (org-tags-match-list-sublevels t)))
+                                 (todo "TODO|GOAL|WAIT"
+                                       ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
+                                        (org-agenda-skip-function '(my-org-skip-subtree-if-habit))
+                                        (org-tags-match-list-sublevels t)))
+
+                                 (todo "DONE|GOAL|STRT"
+                                       ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
+                                        (org-tags-match-list-sublevels t)))
                                  )
                                 ((org-agenda-tag-filter-preset '("+personal"))))
                                 )
