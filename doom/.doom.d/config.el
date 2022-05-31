@@ -82,26 +82,16 @@
            "STRT(s)"  ; A task that is in progress
            "WAIT(w@)"  ; Something external is holding up this task
            "DELG(D@)"  ; Task was delegated to someone else.
-           "HOLD(h@)"  ; This task is paused/on hold because of me
-           "IDEA(i)"  ; An unconfirmed and unapproved task or notion
            "|"
            "DONE(d!)"  ; Task successfully completed
-           "KILL(k@)" ; Task was cancelled, aborted or is no longer applicable
-           "BACK(b)") ; Task was scheduled in the backlog
-          (sequence
-           "Q(q)"
-           "|"
-           "YES(y)"
-           "NO(n)"))
+           "KILL(k@)") ; Task was cancelled, aborted or is no longer applicable
+          )
         org-todo-keyword-faces
         '(("[-]"  . +org-todo-active)
           ("STRT" . +org-todo-active)
           ("[?]"  . +org-todo-onhold)
           ("WAIT" . +org-todo-onhold)
-          ("HOLD" . +org-todo-onhold)
-          ("BACK" . +org-todo-onhold)
           ("GOAL" . +org-todo-project)
-          ("NO"   . +org-todo-cancel)
           ("KILL" . +org-todo-cancel))))
 
 (add-to-list 'org-modules 'org-checklist)
