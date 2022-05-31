@@ -230,3 +230,11 @@
 (setq
   scroll-margin 10)                      ;; When to start moving the buffer up or down
 
+(use-package org-pomodoro
+  :ensure t
+  :commands (org-pomodoro)
+  :config
+  (setq
+   org-pomodoro-length 50
+   org-pomodoro-short-break-length 10
+   ))
