@@ -273,11 +273,17 @@
     (unless (and recurrence old-start) (org-schedule nil timestamp))))
 (add-hook 'org-gcal-after-update-entry-functions #'my-org-gcal-set-scheduled)
 
+(use-package org-edna
+  :ensure t
+  :commands (org-edna-mode))
+
+(org-edna-mode)
+
  (setenv "NODE_PATH"
       (concat
        (getenv "HOME") "/gtd/node_modules"  ":"
        (getenv "NODE_PATH")
-      )
+     )
     )
 
     (org-babel-do-load-languages

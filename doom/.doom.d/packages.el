@@ -52,3 +52,4 @@
 (package! org-gtd)
 (package! org-gcal)
 (package! olivetti)
+(package! org-edna)
