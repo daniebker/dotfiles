@@ -73,15 +73,15 @@
   :config
   (setq
    org-log-into-drawer t
-   org-refile-targets '((org-buffer-list :maxlevel . 3 ) (org-agenda-files :maxlevel . 3))
+   org-todo-repeat-to-state "TODO"
+   org-refile-targets '((org-buffer-list :maxlevel . 3 ) (org-agenda-files :maxlevel . 7))
    org-todo-keywords
         '((sequence
+           "GOAL(g)"  ; A goal, which usually contains other tasks
            "TODO(t)"  ; A task that needs doing & is ready to do
            "NEXT(e)"  ; The next thing to do
-           "GOAL(g)"  ; A goal, which usually contains other tasks
            "STRT(s)"  ; A task that is in progress
            "WAIT(w@)"  ; Something external is holding up this task
-           "DELG(D@)"  ; Task was delegated to someone else.
            "|"
            "DONE(d!)"  ; Task successfully completed
            "KILL(k@)") ; Task was cancelled, aborted or is no longer applicable
@@ -101,8 +101,8 @@
 
 (setq display-line-numbers-type 'relative)
 
+;; TRANSPARENCY
 (set-frame-parameter (selected-frame) 'alpha '(85))
-
 (add-to-list 'default-frame-alist '(alpha 85))
 
 (defun my-agenda-prefix ()
@@ -131,7 +131,6 @@
   (setq
    org-agenda-files `(,org-gtd-directory)
    org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled
-   org-habit-show-all-today t
    org-agenda-custom-commands '(
                                 ("g" "Scheduled today and all NEXT items"  ;; a useful view to see what can be accomplished today
                                  ((agenda "" (
@@ -143,56 +142,53 @@
                                   (todo "STRT")
                                   (todo "WAIT")
                                   (todo "GOAL")))
-                                ("w" "Daily work plan"
+                                ("R" "Weekly Review"
+                                 ((agenda "" (
+                                        (org-agenda-span 'week)
+                                        (org-agenda-start-on-weekday 0)
+                                        (org-agenda-start-with-log-mode t)
+                                        (org-agenda-skip-function
+                                         '(org-agenda-skip-entry-if 'nottodo 'done))))))
+                                ("p" "Daily plan"
                                 ((agenda "" (
                                         (org-agenda-span 1)
                                         (org-agenda-start-day "-0d")
                                         (org-agenda-start-on-weekday nil)
+                                        (org-agenda-use-time-grid nil)
                                         (org-agenda-sorting-strategy
                                          (quote ((agenda time-up priority-down))))
-                                        (org-deadline-warning-days 3)))
+                                        (org-deadline-warning-days 14)))
                                  (todo "STRT"
-                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-                                 (todo "TODO|GOAL|WAIT|NEXT"
-                                       ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
-                                        (org-tags-match-list-sublevels t)))
-
-                                 (todo "DONE")
-                                 )
-                                ((org-agenda-tag-filter-preset '("+work"))))
-                                ("p" "Daily personal plan"((agenda "" (
-                                        (org-agenda-span 2)
-                                        (org-agenda-start-day "-0d")
-                                        (org-agenda-start-on-weekday nil)
-                                        (org-agenda-sorting-strategy
-                                         (quote ((agenda time-up priority-down))))
-                                        (org-deadline-warning-days 3)))
-                                 (todo "STRT"
-                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-                                 (todo "NEXT|GOAL"
                                        ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
+                                        (org-agenda-overriding-header "\n⏰ Started\n------------------\n")))
+                                 (todo "NEXT|GOAL"
+                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                                        (org-agenda-prefix-format " %e %(my-agenda-prefix) ")
-                                        (org-tags-match-list-sublevels t)))
-                                 (todo "TODO|GOAL|WAIT"
+                                       (org-tags-match-list-sublevels t)
+                                       (org-agenda-overriding-header "\n🚀 Ready\n------------------\n")))
+                                 (todo "WAIT"
                                        ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
                                         (org-agenda-skip-function '(my-org-skip-subtree-if-habit))
-                                        (org-tags-match-list-sublevels t)))
-
-                                 (todo "DONE|GOAL|STRT"
+                                        (org-tags-match-list-sublevels t)
+                                        (org-agenda-overriding-header "\n🅿 ️Parked\n------------------\n")))
+                                 (todo "GOAL|TODO"
                                        ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
-                                        (org-tags-match-list-sublevels t)))
+                                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+                                        (org-tags-match-list-sublevels t)
+                                        (org-agenda-overriding-header "\n📝 ️Backlog\n------------------\n")))
                                  )
-                                ((org-agenda-tag-filter-preset '("+personal"))))
+                                )
+
                                 )
                                 
    org-capture-templates
       `(("i" "Inbox"
          entry (file ,(org-gtd-inbox-path))
-         "* %?\n%U\n\n  %i"
+         "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END: \n\n%i"
          :kill-buffer t)
         ("l" "Todo with link"
          entry (file ,(org-gtd-inbox-path))
-         "* %?\n%U\n\n  %i\n  %a"
+         "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n  %a"
          :kill-buffer t))))
 
 ;; this allows you use `(,org-gtd-directory) for your agenda files
@@ -283,7 +279,7 @@
       (concat
        (getenv "HOME") "/gtd/node_modules"  ":"
        (getenv "NODE_PATH")
-     )
+      )
     )
 
     (org-babel-do-load-languages
