@@ -50,4 +50,5 @@
 ;(unpin! t)
 
 (package! org-gtd)
+(package! org-gcal)
 (package! olivetti)
