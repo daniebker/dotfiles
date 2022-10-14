@@ -69,6 +69,12 @@
   :config
   (setq org-roam-directory (file-truename "~/gtd/roam")))
 
+(require 'org-crypt)
+(org-crypt-use-before-save-magic)
+(setq org-tags-exclude-from-inheritance (quote ("crypt")))
+;; GPG key to use for encryption
+;; Either the Key ID or set to nil to use symmetric encryption.
+(setq org-crypt-key "Daniel Baker")
 
 (use-package! org-archive
   :after org
