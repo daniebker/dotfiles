@@ -64,6 +64,16 @@
 ;;;;;;;;
 
 
+(use-package! org-roam
+  :after org
+  :config
+  (setq org-roam-directory (file-truename "~/gtd/roam")))
+
+(use-package! org-journal
+  :after org
+  :config
+  (setq org-journal-dir (file-truename "~/gtd/journal")))
+
 (use-package! org-archive
   :after org
   :config
