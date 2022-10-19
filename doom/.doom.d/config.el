@@ -390,3 +390,6 @@
     (if  (not (equal (length struct) 1))
         (newline))
     (org-insert-struct (cdr struct))))
+
+;; Auto refresh buffers on disk content change
+(global-auto-revert-mode t)
