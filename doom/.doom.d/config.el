@@ -225,50 +225,6 @@
    org-pomodoro-short-break-length 10
    ))
 
-(use-package org-gcal
-  :config
-  (setq
-   org-log-reschedule nil))
-
-(defun my-org-gcal-set-scheduled (_calendar-id event _update-mode)
-  "Set SCHEDULED property based on EVENT if it's not an recurring event with old start."
-  (let*
-      ((stime (plist-get (plist-get event :start)
-                         :dateTime))
-       (etime (plist-get (plist-get event :end)
-                         :dateTime))
-       (sday  (plist-get (plist-get event :start)
-                         :date))
-       (eday  (plist-get (plist-get event :end)
-                         :date))
-       (start (if stime (org-gcal--convert-time-to-local-timezone stime org-gcal-local-timezone) sday))
-       (end   (if etime (org-gcal--convert-time-to-local-timezone etime org-gcal-local-timezone) eday))
-       (old-time-desc (org-gcal--get-time-and-desc))
-       (old-start (plist-get old-time-desc :start))
-       (old-end (plist-get old-time-desc :start))
-       (recurrence (plist-get event :recurrence))
-       (timestamp
-        (if (or (string= start end) (org-gcal--alldayp start end))
-            (org-gcal--format-iso2org start)
-          (if (and
-               (= (plist-get (org-gcal--parse-date start) :year)
-                  (plist-get (org-gcal--parse-date end)   :year))
-               (= (plist-get (org-gcal--parse-date start) :mon)
-                  (plist-get (org-gcal--parse-date end)   :mon))
-               (= (plist-get (org-gcal--parse-date start) :day)
-                  (plist-get (org-gcal--parse-date end)   :day)))
-              (format "<%s-%s>"
-                      (org-gcal--format-date start "%Y-%m-%d %a %H:%M")
-                      (org-gcal--format-date end "%H:%M"))
-            (format "%s--%s"
-                    (org-gcal--format-iso2org start)
-                    (org-gcal--format-iso2org
-                     (if (< 11 (length end))
-                         end
-                       (org-gcal--iso-previous-day end))))))))
-    (unless (and recurrence old-start) (org-schedule nil timestamp))))
-(add-hook 'org-gcal-after-update-entry-functions #'my-org-gcal-set-scheduled)
-
 (use-package org-edna
   :ensure t
   :commands (org-edna-mode))
