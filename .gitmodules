@@ -4,3 +4,6 @@
 [submodule "vim/.vim/pack/themes/start/dracula"]
 	path = vim/.vim/pack/themes/start/dracula
 	url = https://github.com/dracula/vim.git
+[submodule "iterm/iterm-dracula"]
+	path = iterm/iterm-dracula
+	url = https://github.com/dracula/iterm.git
