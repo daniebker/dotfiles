@@ -117,6 +117,12 @@
 (set-frame-parameter (selected-frame) 'alpha '(85))
 (add-to-list 'default-frame-alist '(alpha 85))
 
+(defun on-after-init ()
+  (unless (display-graphic-p (selected-frame))
+    (set-face-background 'default "unspecified-bg" (selected-frame))))
+
+(add-hook 'window-setup-hook 'on-after-init)
+
 (defun my-agenda-prefix ()
   (format "%s" (my-agenda-indent-string (org-current-level))))
 
