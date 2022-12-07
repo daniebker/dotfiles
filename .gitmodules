@@ -10,6 +10,3 @@
 [submodule "oh-my-zsh/.oh-my-zsh/custom/themes/powerlevel10k"]
 	path = oh-my-zsh/.oh-my-zsh/custom/themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
-[submodule "xresources"]
-	path = xresources
-	url = https://github.com/dracula/xresources.git
