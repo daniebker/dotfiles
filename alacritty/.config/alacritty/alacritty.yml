@@ -1,2 +1,6 @@
 import:
-  - dracula.yml
+  - ./dracula.yml
+window:
+  opacity: 0.9
+font:
+  size: 8
