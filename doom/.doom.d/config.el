@@ -31,6 +31,7 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
+(setq +zen-text-scale 0.8 )
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
@@ -63,7 +64,6 @@
 ;; ORG
 ;;;;;;;;
 
-
 (use-package! org-roam
   :after org
   :config
@@ -85,6 +85,7 @@
   :config
   (setq
    org-log-into-drawer t
+   org-log-note-clock-out t
    org-todo-repeat-to-state "TODO"
    org-refile-targets '((org-buffer-list :maxlevel . 3 ) (org-agenda-files :maxlevel . 7))
    org-todo-keywords
@@ -147,7 +148,7 @@
   :demand t
   :config
   (setq
-   org-agenda-files `(,org-gtd-directory)
+   org-agenda-files '("~/gtd/plan.org")
    org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled
    org-agenda-custom-commands '(
                                 ("g" "Scheduled today and all NEXT items"  ;; a useful view to see what can be accomplished today
@@ -231,8 +232,53 @@
         :desc "Clarify and finalise" "f" #'org-gtd-clarify-finalize))
 
 
+(defun my/clocktable-formatter-group-by-prop (ipos tables params)
+  (let* ((formatter (or org-clock-clocktable-formatter
+                        'org-clocktable-write-default))
+         (ht (make-hash-table :test 'equal))
+         (total 0)
+         (grouped
+          (dolist (tt tables (sort (hash-table-keys ht)
+                                   #'(lambda (x y) (string< x y))))
+            (setq total (+ total (nth 1 tt)))
+            (dolist (record (nth 2 tt))
+              (let* ((lasttwo (last record 2))
+                     (time (pop lasttwo))
+                     (prop (cdr (car (car lasttwo))))
+                     (prev (gethash prop ht 0)))
+                (puthash prop (+ prev time) ht))
+              ))
+          )
+         (newtable (mapcar (lambda (arg) (list 1 arg nil nil (gethash arg ht) nil)) grouped))
+         (new-params (org-plist-delete params :properties)))
+    (funcall formatter ipos (list (list nil total newtable)) new-params)))
+
+(defun my/org-sum-tally-in-subtree ()
+  "Add up all the TALLY properties of headings underneath the current one
+The total is written to the TALLY_SUM property of this heading"
+  (interactive)
+  (org-entry-put (point) "SCORE_SUM"
+                 (number-to-string
+                  (let ((total 0)(count 0))
+                    (save-excursion
+                      (org-map-tree
+                       (lambda ()
+                         (let ((n (org-entry-get (point) "SCORE")))
+                           (when (stringp n)
+                             (setq total (+ total (string-to-number n))
+                                   count (+ 1 count)))))))
+                    (/ total count)))))
+
+(defun my/roam-dailies ()
+  "Returns the org roam dailies dir"
+  (concat org-roam-directory "/" org-roam-dailies-directory "*.org"))
+
 (setq
   scroll-margin 10)                      ;; When to start moving the buffer up or down
+
+(use-package! org-ql
+  :after org)
+(require 'org-ql-search)
 
 (use-package org-pomodoro
   :ensure t
@@ -399,3 +445,7 @@
 
 ;; Auto refresh buffers on disk content change
 (global-auto-revert-mode t)
+
+;; run an emacs server
+(server-start)
+(setq-hook! 'web-mode-hook +format-with 'prettier)
