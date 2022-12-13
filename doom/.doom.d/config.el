@@ -90,7 +90,7 @@
    org-refile-targets '((org-buffer-list :maxlevel . 3 ) (org-agenda-files :maxlevel . 7))
    org-todo-keywords
         '((sequence
-           "GOAL(g)"  ; A goal, which usually contains other tasks
+           "PROJ(p)"  ; A goal, which usually contains other tasks
            "TODO(t)"  ; A task that needs doing & is ready to do
            "NEXT(e)"  ; The next thing to do
            "STRT(s)"  ; A task that is in progress
@@ -104,7 +104,7 @@
           ("STRT" . +org-todo-active)
           ("[?]"  . +org-todo-onhold)
           ("WAIT" . +org-todo-onhold)
-          ("GOAL" . +org-todo-project)
+          ("PROJ" . +org-todo-project)
           ("KILL" . +org-todo-cancel))))
 
 (add-to-list 'org-modules 'org-checklist)
