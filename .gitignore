@@ -6,3 +6,4 @@ tmp/
 tmux/.tmux/plugins/*
 !tmux/.tmux/plugins/tpm/
 /doom/.doom.d/secrets.el
+*.plist
