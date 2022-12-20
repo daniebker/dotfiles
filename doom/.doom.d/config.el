@@ -399,3 +399,10 @@
 
 ;; Auto refresh buffers on disk content change
 (global-auto-revert-mode t)
+
+(defun sync-to-cloud ()
+  "Sync org file to Raspberry Pi with external script."
+  (when (eq major-mode 'org-mode)
+    (shell-command-to-string "rclone sync ~/gtd OneDrive:gtd")))
+
+(add-hook 'after-save-hook #'sync-to-cloud)
