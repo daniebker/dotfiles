@@ -7,6 +7,6 @@
 [submodule "iterm/iterm-dracula"]
 	path = iterm/iterm-dracula
 	url = https://github.com/dracula/iterm.git
-[submodule "/Users/dbaker/.dotfiles/oh-my-zsh/.oh-my-zsh/custom/themes/powerlevel10k"]
-	path = /Users/dbaker/.dotfiles/oh-my-zsh/.oh-my-zsh/custom/themes/powerlevel10k
+[submodule "oh-my-zsh/.oh-my-zsh/custom/themes/powerlevel10k"]
+	path = oh-my-zsh/.oh-my-zsh/custom/themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git

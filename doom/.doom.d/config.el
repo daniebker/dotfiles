@@ -449,3 +449,11 @@ The total is written to the TALLY_SUM property of this heading"
 ;; run an emacs server
 (server-start)
 (setq-hook! 'web-mode-hook +format-with 'prettier)
+
+;; Hooks
+(defun sync-to-cloud ()
+  "Sync org file to Raspberry Pi with external script."
+  (when (eq major-mode 'org-mode)
+    (shell-command-to-string "rclone sync ~/gtd OneDrive:gtd")))
+
+(add-hook 'after-save-hook #'sync-to-cloud)
