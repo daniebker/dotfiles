@@ -150,6 +150,19 @@
   (setq
    org-agenda-files '("~/gtd/plan.org")
    org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled
+   org-agenda-time-grid '(
+    (daily today require-timed remove-match)
+    (0800 0900 1000 1100 1200 1300 1400 1500 1600 1700 1800 1900 2000 2100)
+    ": "
+    "------FREE------")
+   org-agenda-prefix-format '(
+    ;; (agenda  . " %i %-12:c%?-12t% s") ;; file name + org-agenda-entry-type
+    ;; (agenda  . " %i %-12:c% s") ;; file name + org-agenda-entry-type
+    (agenda  . " • %t %-:c ")
+    (timeline  . "  % s")
+    (todo  . " %i %-12:c")
+    (tags  . " %i %-12:c")
+    (search . " %i %-12:c"))
    org-agenda-custom-commands '(
                                 ("g" "Scheduled today and all NEXT items"  ;; a useful view to see what can be accomplished today
                                  ((agenda "" (
@@ -163,41 +176,36 @@
                                   (todo "GOAL")))
                                 ("R" "Weekly Review"
                                  ((agenda "" (
-                                        (org-agenda-span 'week)
-                                        (org-agenda-start-on-weekday 0)
+                                        (org-agenda-span 7)
+                                        (org-agenda-start-day "-6d")
                                         (org-agenda-start-with-log-mode t)
-                                        (org-agenda-skip-function
-                                         '(org-agenda-skip-entry-if 'nottodo 'done))))))
+                                        (org-agenda-use-time-grid nil)
+                                        ))
+                                  ))
                                 ("p" "Daily plan"
                                 ((agenda "" (
                                         (org-agenda-span 1)
+                                        (org-agenda-skip-scheduled-if-done nil)
                                         (org-agenda-start-day "-0d")
+                                        (org-agenda-start-with-log-mode t)
+                                        (org-agenda-log-mode-items '(state clock))
                                         (org-agenda-start-on-weekday nil)
-                                        (org-agenda-use-time-grid nil)
+                                        (org-agenda-use-time-grid t)
                                         (org-agenda-sorting-strategy
                                          (quote ((agenda time-up priority-down))))
                                         (org-deadline-warning-days 14)))
-                                 (todo "STRT"
-                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
-                                        (org-agenda-overriding-header "\n⏰ Started\n------------------\n")))
-                                 (todo "NEXT|GOAL"
-                                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
-                                       (org-agenda-prefix-format " %e %(my-agenda-prefix) ")
-                                       (org-tags-match-list-sublevels t)
-                                       (org-agenda-overriding-header "\n🚀 Ready\n------------------\n")))
-                                 (todo "WAIT"
-                                       ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
-                                        (org-agenda-skip-function '(my-org-skip-subtree-if-habit))
-                                        (org-tags-match-list-sublevels t)
-                                        (org-agenda-overriding-header "\n🅿 ️Parked\n------------------\n")))
-                                 (todo "GOAL|TODO"
-                                       ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
-                                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
-                                        (org-tags-match-list-sublevels t)
-                                        (org-agenda-overriding-header "\n📝 ️Backlog\n------------------\n")))
-                                 )
-                                )
-
+                                 ))
+                                ("w" "Weekly plan"
+                                ((agenda "" (
+                                        (org-agenda-span 7)
+                                        (org-agenda-skip-scheduled-if-done t)
+                                        (org-agenda-start-day "-0d")
+                                        (org-agenda-start-on-weekday nil)
+                                        (org-agenda-use-time-grid t)
+                                        (org-agenda-sorting-strategy
+                                         (quote ((agenda time-up priority-down))))
+                                        (org-deadline-warning-days 14)))
+                                 ))
                                 )
                                 
    org-capture-templates
@@ -450,10 +458,11 @@ The total is written to the TALLY_SUM property of this heading"
 (server-start)
 (setq-hook! 'web-mode-hook +format-with 'prettier)
 
-;; Hooks
-(defun sync-to-cloud ()
-  "Sync org file to Raspberry Pi with external script."
-  (when (eq major-mode 'org-mode)
-    (shell-command-to-string "rclone sync ~/gtd OneDrive:gtd")))
+;; ;; Hooks
+;; (defun sync-to-cloud ()
+;;   "Sync org file to Raspberry Pi with external script."
+;;   (when (eq major-mode 'org-mode)
+;;     (shell-command-to-string "rclone sync ~/gtd OneDrive:gtd")))
 
-(add-hook 'after-save-hook #'sync-to-cloud)
+;; (add-hook 'after-save-hook #'sync-to-cloud)
+(setq-default org-download-image-dir "~/gtd/.attach")
