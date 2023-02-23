@@ -166,14 +166,20 @@
    org-agenda-custom-commands '(
                                 ("g" "Scheduled today and all NEXT items"  ;; a useful view to see what can be accomplished today
                                  ((agenda "" (
+                                        (org-agenda-time-grid nil)
                                         (org-agenda-span 1)
                                         (org-agenda-start-day "-0d")
                                         (org-agenda-start-on-weekday nil)
+                                        (org-agenda-sorting-strategy '(category-up priority-down))
                                         (org-deadline-warning-days 7)))
                                   (todo "NEXT")
                                   (todo "STRT")
                                   (todo "WAIT")
-                                  (todo "GOAL")))
+                                  (todo "GOAL"))
+                                 nil
+
+                                ("~/gtd/todo.txt"))
+
                                 ("R" "Weekly Review"
                                  ((agenda "" (
                                         (org-agenda-span 7)
@@ -182,6 +188,17 @@
                                         (org-agenda-use-time-grid nil)
                                         ))
                                   ))
+                                ("b" agenda "Today's Deadlines"
+                                 ((org-agenda-span 'day)
+                                  (org-agenda-skip-function '(org-agenda-skip-deadline-if-not-today))
+                                  (org-agenda-entry-types '(:deadline))
+                                                  (org-agenda-overriding-header "Today's Deadlines ")))
+                                ("c" "List TODOs grouped by category" alltodo "" (
+                                        (org-agenda-span 1)
+                                        (org-agenda-skip-scheduled-if-done nil)
+                                        (org-agenda-start-day "-0d")
+                                        (org-agenda-sorting-strategy '(category-up priority-down))
+                                ))
                                 ("p" "Daily plan"
                                 ((agenda "" (
                                         (org-agenda-span 1)
@@ -205,7 +222,9 @@
                                         (org-agenda-sorting-strategy
                                          (quote ((agenda time-up priority-down))))
                                         (org-deadline-warning-days 14)))
-                                 ))
+                                 )
+                                nil
+                                ("~/gtd/calendar.ics" "~/gtd/calendar.html" "~/gtd/calendar.txt" "~/gtd/calendar.epub"))
                                 )
                                 
    org-capture-templates
