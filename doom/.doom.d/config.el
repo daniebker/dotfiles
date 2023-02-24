@@ -147,6 +147,27 @@
   :after org
   :demand t
   :config
+  (defun dlb/count-done ()
+    (interactive)
+    (save-excursion
+        ;; we need to end up *before* the start of the drawer in order
+        ;; to parse it correctly, so we back up one line from where org-log-beginning tells us.
+      (goto-char (org-log-beginning))
+      (forward-line -1)
+      (let ((contents (cadr (org-element-drawer-parser nil nil))))
+        (count-lines (plist-get contents :contents-begin)
+                     (plist-get contents :contents-end)))))
+
+  (defun dlb/count (count)
+    (let* ((reset-count-prop (org-entry-get (point) "reset-count"))
+           (reset-count (or (and reset-count-prop (string-to-number reset-count-prop))
+                            10)))
+      (% count reset-count)))
+
+  (defun dlb/put-count ()
+    (interactive)
+    (let ((count (ndk/count-done)))
+      (org-entry-put (point) "done-count" (format "%d" (ndk/count count)))))
   (setq
    org-agenda-files '("~/gtd/plan.org")
    org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled
@@ -171,15 +192,15 @@
                                         (org-agenda-start-day "-0d")
                                         (org-agenda-start-on-weekday nil)
                                         (org-agenda-sorting-strategy '(category-up priority-down))
-                                        (org-deadline-warning-days 7)))
+                                        (org-deadline-warning-days 7)
+                                        (org-agenda-overriding-header "Today's plan ")))
                                   (todo "NEXT")
                                   (todo "STRT")
                                   (todo "WAIT")
-                                  (todo "GOAL"))
+                                  (todo "PROJ"))
                                  nil
 
                                 ("~/gtd/todo.txt"))
-
                                 ("R" "Weekly Review"
                                  ((agenda "" (
                                         (org-agenda-span 7)
