@@ -91,10 +91,10 @@
    org-todo-keywords
         '((sequence
            "PROJ(p)"  ; A goal, which usually contains other tasks
-           "TODO(t)"  ; A task that needs doing & is ready to do
            "NEXT(e)"  ; The next thing to do
            "STRT(s)"  ; A task that is in progress
            "WAIT(w@)"  ; Something external is holding up this task
+           "TODO(t)"  ; A task that needs doing & is ready to do
            "|"
            "DONE(d!)"  ; Task successfully completed
            "KILL(k@)") ; Task was cancelled, aborted or is no longer applicable
