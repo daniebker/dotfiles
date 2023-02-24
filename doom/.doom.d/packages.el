@@ -50,6 +50,5 @@
 ;(unpin! t)
 
 (package! org-gtd)
-(package! olivetti)
 (package! org-edna)
 (package! org-ql)
