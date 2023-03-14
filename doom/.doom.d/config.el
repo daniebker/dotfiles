@@ -67,7 +67,14 @@
 (use-package! org-roam
   :after org
   :config
-  (setq org-roam-directory (file-truename "~/gtd/roam")))
+  (setq
+   org-roam-directory (file-truename "~/gtd/roam")
+   org-roam-capture-templates
+   '(("d" "default" plain
+      "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+author: Daniel Baker\n#+hugo_base_dir: ~/src/personal/daniebkerv2\n#+language: en\n#+HUGO_SECTION: garden\n#+DATE: %<%Y-%m-%d_%H:%M:%S>")
+      :unnarrowed t))
+   ))
 
 (require 'org-crypt)
 (org-crypt-use-before-save-magic)
@@ -506,3 +513,6 @@ The total is written to the TALLY_SUM property of this heading"
 
 ;; (add-hook 'after-save-hook #'sync-to-cloud)
 (setq-default org-download-image-dir "~/gtd/.attach")
+
+;; LOAD SECRETS
+(load-file (expand-file-name "secrets.el.gpg" doom-user-dir))
