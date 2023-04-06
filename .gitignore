@@ -8,3 +8,9 @@ tmux/.tmux/plugins/*
 /doom/.doom.d/secrets.el
 *.plist
 /doom/.doom.d/secrets.el.gpg
+
+vscode/Library/Application Support/Code/User/History/*
+vscode/Library/Application Support/Code/User/globalStorage/*
+vscode/Library/Application Support/Code/User/workspaceStorage/*
+vscode/Library/Application Support/Code/User/sync/*
+*.gpg

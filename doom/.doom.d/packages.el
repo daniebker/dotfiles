@@ -52,3 +52,11 @@
 (package! org-gtd)
 (package! org-edna)
 (package! org-ql)
+(package! org-drill)
+(unpin! org-roam)
+(package! websocket)
+(package! org-roam-ui)
+(package! chatgpt-arcana
+  :recipe (:host github :repo "CarlQLange/ChatGPT-Arcana.el" :files ("*.el")))
+(package! copilot
+  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))

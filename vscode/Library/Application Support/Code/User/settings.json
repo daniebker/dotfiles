@@ -1,0 +1,161 @@
+{
+  "vim.smartRelativeLine": true,
+  "editor.lineNumbers": "relative",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.inlineSuggest.enabled": true,
+  "github.copilot.enable": {
+    "*": true,
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.editor.showTabs": false,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "vim.easymotion": true,
+  "vim.useSystemClipboard": true,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "<space>"
+      ],
+      "commands": [
+        "vspacecode.space"
+      ]
+    },
+    {
+      "before": [
+        ","
+      ],
+      "commands": [
+        "vspacecode.space",
+        {
+          "command": "whichkey.triggerKey",
+          "args": "m"
+        }
+      ]
+    }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "<space>"
+      ],
+      "commands": [
+        "vspacecode.space"
+      ]
+    },
+    {
+      "before": [
+        ","
+      ],
+      "commands": [
+        "vspacecode.space",
+        {
+          "command": "whichkey.triggerKey",
+          "args": "m"
+        }
+      ]
+    }
+  ],
+  "vspacecode.bindingOverrides": [
+    {
+      "keys": "f.p",
+      "name": "Preferences JSON...",
+      "type": "command",
+      "command": "workbench.action.openApplicationSettingsJson"
+    },
+    {
+      "keys": ",",
+      "name": "Buffers...",
+      "type": "command",
+      "command": "workbench.action.showEditorsInActiveGroup"
+    },
+    {
+      "keys": "<space>",
+      "name": "Open file...",
+      "type": "command",
+      "command": "workbench.action.quickOpen"
+    },
+    {
+      "keys": "w.h",
+      "name": "Focus editor right",
+      "type": "command",
+      "command": "workbench.action.focusLeftGroup"
+    },
+    {
+      "keys": "w.l",
+      "name": "Move group right",
+      "type": "command",
+      "command": "workbench.action.focusRightGroup"
+    },
+    {
+      "keys": "w.H",
+      "name": "Move group left",
+      "type": "command",
+      "command": "workbench.action.moveActiveEditorGroupLeft"
+    },
+    {
+      "keys": "w.L",
+      "name": "Move group right",
+      "type": "command",
+      "command": "workbench.action.moveActiveEditorGroupRight"
+    },
+    {
+      "keys": "t.t",
+      "name": "Toggle new terminal to Editor",
+      "type": "command",
+      "command": "workbench.action.createTerminalEditorSide"
+    },
+    {
+      "keys": "c.d",
+      "name": "Go to definition",
+      "type": "command",
+      "command": "editor.action.revealDefinition"
+    },
+    {
+      "keys": "c.D",
+      "name": "Go to references...",
+      "type": "command",
+      "command": "editor.action.goToReferences"
+    },
+    {
+      "keys": "g.g",
+      "name": "Magit status...",
+      "type": "command",
+      "command": "magit.status"
+    },
+    {
+      "keys": "g.l",
+      "name": "Git Worktrees List...",
+      "type": "command",
+      "command": "git-worktrees.worktree.list"
+    },
+    {
+      "keys": "g.r",
+      "name": "Git Worktrees Remove...",
+      "type": "command",
+      "command": "git-worktrees.worktree.remove"
+    },
+    {
+      "keys": "b.k",
+      "name": "Close window",
+      "type": "command",
+      "command": "workbench.action.closeActiveEditor"
+    },
+    {
+      "keys": "c.r",
+      "name": "Rename symbol",
+      "type": "command",
+      "command": "editor.action.rename"
+    }
+  ],
+  "editor.cursorSurroundingLines": 25,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.activityBar.visible": false,
+  "workbench.colorTheme": "Dracula"
+}

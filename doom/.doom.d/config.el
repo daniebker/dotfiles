@@ -72,7 +72,7 @@
    org-roam-capture-templates
    '(("d" "default" plain
       "%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+author: Daniel Baker\n#+hugo_base_dir: ~/src/personal/daniebkerv2\n#+language: en\n#+HUGO_SECTION: garden\n#+DATE: %<%Y-%m-%d_%H:%M:%S>")
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "${title}\n#+author: Daniel Baker\n#+hugo_base_dir: ~/src/personal/daniebkerv2\n#+language: en\n#+HUGO_SECTION: garden\n#+DATE: %<%Y-%m-%d_%H:%M:%S>")
       :unnarrowed t))
    ))
 
@@ -239,16 +239,18 @@
                                         (org-agenda-sorting-strategy
                                          (quote ((agenda time-up priority-down))))
                                         (org-deadline-warning-days 14)))
-                                 ))
+                                  (todo "NEXT")
+                                  (todo "STRT")
+                                  (todo "WAIT")
+                                  (todo "PROJ"))
+                                 nil
+
+                                ("~/gtd/todo.txt"))
                                 ("w" "Weekly plan"
                                 ((agenda "" (
                                         (org-agenda-span 7)
-                                        (org-agenda-skip-scheduled-if-done t)
                                         (org-agenda-start-day "-0d")
                                         (org-agenda-start-on-weekday nil)
-                                        (org-agenda-use-time-grid t)
-                                        (org-agenda-sorting-strategy
-                                         (quote ((agenda time-up priority-down))))
                                         (org-deadline-warning-days 14)))
                                  )
                                 nil
@@ -514,5 +516,68 @@ The total is written to the TALLY_SUM property of this heading"
 ;; (add-hook 'after-save-hook #'sync-to-cloud)
 (setq-default org-download-image-dir "~/gtd/.attach")
 
-;; LOAD SECRETS
-(load-file (expand-file-name "secrets.el.gpg" doom-user-dir))
+(require 'ox-taskjuggler)
+
+(setq org-taskjuggler-default-reports
+  '("textreport report \"Plan\" {
+  formats html
+  header '== %title =='
+  center -8<-
+    [#Plan Plan] | [#Resource_Allocation Resource Allocation]
+    ----
+    === Plan ===
+    <[report id=\"plan\"]>
+    ----
+    === Resource Allocation ===
+    <[report id=\"resourceGraph\"]>
+  ->8-
+}
+# A traditional Gantt chart with a project overview.
+taskreport plan \"\" {
+  headline \"Project Plan\"
+  columns bsi, name, start, end, complete, effort, chart { width 1000 }
+  loadunit shortauto
+  hideresource 1
+}
+# A graph showing resource allocation. It identifies whether each
+# resource is under- or over-allocated for.
+resourcereport resourceGraph \"\" {
+  headline \"Resource Allocation Graph\"
+  columns no, name, effort, complete, weekly
+  loadunit shortauto
+  hidetask ~(isleaf() & isleaf_())
+  sorttasks plan.start.up
+}"))
+
+
+;; Reads a locally encrypted file thar contains the API key
+;; for the ChatGPT-arcana API
+(load-file "~/.doom.d/chatgpt-arcana.el.gpg")
+(map! :leader
+      (:prefix ("a" . "AI")
+       (:prefix ("g" . "ChatGPT")
+                :desc "insert at point" "i" #'chatgpt-arcana-insert-at-point
+                :desc "replace region" "I" #'chatgpt-arcana-replace-region
+                :desc "Start chat" "c" #'chatgpt-arcana-start-chat
+                :desc "resume chat" "r" #'chatgpt-arcana-resume-chat)))
+
+;; Copilot
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
+
+;; accept completion from copilot and fallback to company
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+
+(map! :leader
+      (:prefix ("a" . "AI")
+       (:prefix ("c" . "copilot")
+                :desc "toggle copilot mode" "c" #'copilot-mode
+                :desc "login" "l" #'copilot-login
+                :desc "logout" "L" #'copilot-logout)))
