@@ -118,6 +118,3 @@ export NODE_OPTIONS="--max-old-space-size=8192"
 if [ -f ~/.zshsecrets ]; then
     source ~/.zshsecrets
 fi
-
-alias stslogin="stskeygen --profile merchfeature --account merchfeature --admin aws-merch-feature \
-stskeygen --profile merchfeature --account merchfeature aws-merch-feature"
