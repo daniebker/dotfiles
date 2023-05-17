@@ -68,12 +68,24 @@
   :after org
   :config
   (setq
-   org-roam-directory (file-truename "~/gtd/roam")
+   org-roam-directory (file-truename "~/org/roam")
    org-roam-capture-templates
    '(("d" "default" plain
       "%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "${title}\n#+author: Daniel Baker\n#+hugo_base_dir: ~/src/personal/daniebkerv2\n#+language: en\n#+HUGO_SECTION: garden\n#+DATE: %<%Y-%m-%d_%H:%M:%S>")
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+author: Daniel Baker\n#+hugo_base_dir: ~/src/personal/daniebkerv2\n#+language: en\n#+HUGO_SECTION: garden\n#+DATE: %<%Y-%m-%d_%H:%M:%S>")
       :unnarrowed t))
+   ))
+
+(use-package! org-caldav
+  :after org
+  :config
+  (setq
+   org-icalendar-include-todo 'all
+   org-caldav-sync-todo t
+   org-caldav-url "https://caldav.daniebker.co.uk/radicale/dbaker"
+   org-caldav-calendars
+  '((:calendar-id "2bbc543f-450b-6bca-d914-8894ab9a1351" :files ("~/org/watchlater.org")
+     :inbox "~/org/fromwatchlater.org"))
    ))
 
 (require 'org-crypt)
@@ -105,12 +117,20 @@
            "|"
            "DONE(d!)"  ; Task successfully completed
            "KILL(k@)") ; Task was cancelled, aborted or is no longer applicable
+          (sequence
+           "BACK(B)"
+           "PASS(P)"
+           "ACTV(A)"
+           "|"
+           "COMP(C)")
           )
         org-todo-keyword-faces
         '(("[-]"  . +org-todo-active)
           ("STRT" . +org-todo-active)
+          ("ACTV" . +org-todo-active)
           ("[?]"  . +org-todo-onhold)
           ("WAIT" . +org-todo-onhold)
+          ("PASS" . +org-todo-onhold)
           ("PROJ" . +org-todo-project)
           ("KILL" . +org-todo-cancel))))
 
@@ -122,8 +142,8 @@
 (setq display-line-numbers-type 'relative)
 
 ;; TRANSPARENCY
-(set-frame-parameter (selected-frame) 'alpha '(85))
-(add-to-list 'default-frame-alist '(alpha 85))
+(set-frame-parameter (selected-frame) 'alpha '(90))
+(add-to-list 'default-frame-alist '(alpha 90))
 
 (defun on-after-init ()
   (unless (display-graphic-p (selected-frame))
@@ -176,7 +196,8 @@
     (let ((count (ndk/count-done)))
       (org-entry-put (point) "done-count" (format "%d" (ndk/count count)))))
   (setq
-   org-agenda-files '("~/gtd/plan.org")
+   org-gtd-directory "~/org"
+   org-agenda-files '("~/org/plan.org")
    org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled
    org-agenda-time-grid '(
     (daily today require-timed remove-match)
@@ -207,7 +228,7 @@
                                   (todo "PROJ"))
                                  nil
 
-                                ("~/gtd/todo.txt"))
+                                ("~/org/todo.txt"))
                                 ("R" "Weekly Review"
                                  ((agenda "" (
                                         (org-agenda-span 7)
@@ -245,7 +266,7 @@
                                   (todo "PROJ"))
                                  nil
 
-                                ("~/gtd/todo.txt"))
+                                ("~/org/todo.txt"))
                                 ("w" "Weekly plan"
                                 ((agenda "" (
                                         (org-agenda-span 7)
@@ -254,7 +275,7 @@
                                         (org-deadline-warning-days 14)))
                                  )
                                 nil
-                                ("~/gtd/calendar.ics" "~/gtd/calendar.html" "~/gtd/calendar.txt" "~/gtd/calendar.epub"))
+                                ("~/org/calendar.ics" "~/org/calendar.html" "~/org/calendar.txt" "~/org/calendar.epub"))
                                 )
                                 
    org-capture-templates
@@ -288,6 +309,8 @@
         :desc "Stuck projects" "s" #'org-gtd-show-stuck-projects
         :desc "Clarify and finalise" "f" #'org-gtd-clarify-finalize))
 
+(use-package org-kanban
+  :after org)
 
 (defun my/clocktable-formatter-group-by-prop (ipos tables params)
   (let* ((formatter (or org-clock-clocktable-formatter
@@ -354,7 +377,7 @@ The total is written to the TALLY_SUM property of this heading"
 
  (setenv "NODE_PATH"
       (concat
-       (getenv "HOME") "/gtd/node_modules"  ":"
+       (getenv "HOME") "/org/node_modules"  ":"
        (getenv "NODE_PATH")
       )
     )
@@ -514,37 +537,202 @@ The total is written to the TALLY_SUM property of this heading"
 ;;     (shell-command-to-string "rclone sync ~/gtd OneDrive:gtd")))
 
 ;; (add-hook 'after-save-hook #'sync-to-cloud)
-(setq-default org-download-image-dir "~/gtd/.attach")
+(setq-default org-download-image-dir "~/org/.attach")
+(setq-default org-attach-auto-tag "")
 
 (require 'ox-taskjuggler)
 
+;; (setq org-taskjuggler-default-reports
+;;   '("textreport report \"Plan\" {
+;;   formats html
+;;   header '== %title =='
+;;   center -8<-
+;;     [#Plan Plan] | [#Resource_Allocation Resource Allocation]
+;;     ----
+;;     === Plan ===
+;;     <[report id=\"plan\"]>
+;;     ----
+;;     === Resource Allocation ===
+;;     <[report id=\"resourceGraph\"]>
+;;   ->8-
+;; }
+;; # A traditional Gantt chart with a project overview.
+;; taskreport plan \"\" {
+;;   headline \"Project Plan\"
+;;   columns bsi, name, start, end, complete, effort, chart { width 1000 }
+;;   loadunit shortauto
+;;   hideresource 1
+;; }
+;; # A graph showing resource allocation. It identifies whether each
+;; # resource is under- or over-allocated for.
+;; resourcereport resourceGraph \"\" {
+;;   headline \"Resource Allocation Graph\"
+;;   columns no, name, effort, complete, weekly
+;;   loadunit shortauto
+;;   hidetask ~(isleaf() & isleaf_())
+;;   sorttasks plan.start.up
+;; }"))
 (setq org-taskjuggler-default-reports
-  '("textreport report \"Plan\" {
-  formats html
-  header '== %title =='
-  center -8<-
-    [#Plan Plan] | [#Resource_Allocation Resource Allocation]
+  '("navigator navbar {
+  hidereport @none
+}
+
+macro TaskTip [
+  tooltip istask() -8<-
+    '''Start: ''' <-query attribute='start'->
+    '''End: ''' <-query attribute='end'->
     ----
-    === Plan ===
-    <[report id=\"plan\"]>
+    '''Resources:'''
+
+    <-query attribute='resources'->
     ----
-    === Resource Allocation ===
-    <[report id=\"resourceGraph\"]>
+    '''Precursors: '''
+
+    <-query attribute='precursors'->
+    ----
+    '''Followers: '''
+
+    <-query attribute='followers'->
+    ->8-
+]
+
+textreport frame \"\" {
+  header -8<-
+    == Industrialisation de la production ==
+    <[navigator id=\"navbar\"]>
   ->8-
+  footer \"----\"
+  textreport index \"Overview\" {
+    formats html
+    center '<[report id=\"overview\"]>'
+  }
+
+  textreport \"Status\" {
+    formats html
+    center -8<-
+      <[report id=\"status.dashboard\"]>
+      ----
+      <[report id=\"status.completed\"]>
+      ----
+      <[report id=\"status.ongoing\"]>
+      ----
+      <[report id=\"status.future\"]>
+    ->8-
+  }
+
+  textreport \"Deliveries\" {
+    formats html
+    center '<[report id=\"deliveries\"]>'
+  }
+
+  textreport \"ContactList\" {
+    formats html
+    title \"Contact List\"
+    center '<[report id=\"contactList\"]>'
+  }
+  textreport \"ResourceGraph\" {
+    formats html
+    title \"Resource Graph\"
+    center '<[report id=\"resourceGraph\"]>'
+  }
 }
+
 # A traditional Gantt chart with a project overview.
-taskreport plan \"\" {
-  headline \"Project Plan\"
-  columns bsi, name, start, end, complete, effort, chart { width 1000 }
-  loadunit shortauto
-  hideresource 1
+taskreport overview \"\" {
+  header -8<-
+    === Resume du projet ===
+
+    === Planification ===
+  ->8-
+  columns bsi  { title 'WBS' },
+          name, start, end, effort,
+          chart { ${TaskTip}  width 2500 }
+  # For this report we like to have the abbreviated weekday in front
+  # of the date. %a is the tag for this.
+  timeformat \"%a %Y-%m-%d\"
+  loadunit days
+  hideresource @all
+  caption 'Les effort sont en jours'
+
+  footer -8<-
+    === Staffing ===
+
+    Voir [[ResourceGraph]] pour l'allocation detaillee des ressources
+	->8-
 }
+
+# Macro to set the background color of a cell according to the alert
+# level of the task.
+macro AlertColor [
+  cellcolor plan.alert = 0 \"#00D000\" # green
+  cellcolor plan.alert = 1 \"#D0D000\" # yellow
+  cellcolor plan.alert = 2 \"#D00000\" # red
+]
+
+taskreport status \"\" {
+  columns bsi { width 50 title 'WBS' }, name { width 150 },
+          start { width 100 }, end { width 100 },
+          effort { width 100 },
+          alert { tooltip plan.journal
+                          != '' \"<-query attribute='journal'->\" width 150 },
+          status { width 350 }
+
+  taskreport dashboard \"\" {
+    headline \"Project Dashboard (<-query attribute='now'->)\"
+    columns name { title \"Task\" ${AlertColor} width 200},
+            resources { width 200 ${AlertColor}
+                        listtype bullets
+                        listitem \"<-query attribute='name'->\"
+                        start ${projectstart} end ${projectend} },
+            alerttrend { title \"Trend\" ${AlertColor} width 50 },
+            journal { width 350 ${AlertColor} }
+    journalmode status_up
+    journalattributes headline, author, date, summary, details
+    hidetask ~hasalert(0)
+    sorttasks alert.down
+    period %{${now} - 1w} +1y
+  }
+  taskreport completed \"\" {
+    headline \"Taches realisees\"
+   # hidetask ~(delayed.end <= ${now})
+  }
+  taskreport ongoing \"\" {
+    headline \"Taches en cours\"
+    #hidetask ~((delayed.start <= ${now}) & (delayed.end > ${now}))
+  }
+  taskreport future \"\" {
+    headline \"Taches a faire\"
+    #hidetask ~(delayed.start > ${now})
+  }
+}
+
+# A list of all tasks with the percentage completed for each task
+taskreport deliveries \"\" {
+  headline \"Project Deliverables\"
+  columns bsi { title 'WBS' }, name, start, end, note { width 150 }, complete,
+          chart { ${TaskTip} }
+  hideresource @all
+  scenarios plan
+}
+# A list of all employees with their contact details.
+resourcereport contactList \"\" {
+  headline \"Contact list and duty plan\"
+  columns name,
+          email { celltext 1 \"[mailto:<-email-> <-email->]\" },
+          managers { title \"Manager\" },
+          chart { scale day }
+  hideresource ~isleaf()
+  sortresources name.up
+  hidetask @all
+}
+
 # A graph showing resource allocation. It identifies whether each
 # resource is under- or over-allocated for.
 resourcereport resourceGraph \"\" {
   headline \"Resource Allocation Graph\"
-  columns no, name, effort, complete, weekly
+  columns no, name, effort, rate, weekly { ${TaskTip} }
   loadunit shortauto
+  # We only like to show leaf tasks for leaf resources.
   hidetask ~(isleaf() & isleaf_())
   sorttasks plan.start.up
 }"))
@@ -562,9 +750,9 @@ resourcereport resourceGraph \"\" {
                 :desc "resume chat" "r" #'chatgpt-arcana-resume-chat)))
 
 ;; Copilot
-(use-package company-box
-  :ensure t
-  :hook (company-mode . company-box-mode))
+;; (use-package company-box
+;;   :ensure t
+;;   :hook (company-mode . company-box-mode))
 
 ;; accept completion from copilot and fallback to company
 (use-package! copilot

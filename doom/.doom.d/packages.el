@@ -60,3 +60,6 @@
   :recipe (:host github :repo "CarlQLange/ChatGPT-Arcana.el" :files ("*.el")))
 (package! copilot
   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+(package! org-kanban
+  :recipe (:host github :repo "gizmomogwai/org-kanban" :files ("*.el")))
+(package! org-caldav)
