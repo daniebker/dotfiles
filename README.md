@@ -5,7 +5,7 @@ This repo uses stow to manage dotfiles.
 1. Use your package manager to install `stow`
 
 ```sh
-git clone https://github.com/daniebker/dotfiles.git ~/.dotfiles`
+git clone https://github.com/daniebker/dotfiles.git ~/.dotfiles
 cd .dotfiles
 git submodule update --init --recursive
 stow vim
