@@ -328,30 +328,19 @@
     (with-temp-buffer
       (insert "* " heading-to-export "\n" entry-content)
       (org-mode)
-      (goto-char (point-min))
-      ;; (unless (search-forward-regexp "^Table of Contents" nil t)
-      ;;   (goto-char (point-max))
-      ;;   (insert "\n\n # Table of Contents\n\n<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-ret -->\n<!-- markdown-toc end -->\n\n"))
-      ;; (setq org-export-with-toc nil)  ; Disable table of contents))
       (let* ((existing-content (if (file-exists-p dest-file)
                                    (with-temp-buffer
                                      (insert-file-contents dest-file)
                                      (buffer-string))
-                                 ""))
-             (markdown-content (org-export-string-as
-                                (buffer-substring-no-properties (point-min) (point-max))
-                                'md
-                                t)))
-        (with-temp-buffer
-          (insert existing-content)
-          (goto-char (point-min))
-          (if (search-forward-regexp (concat "^\\* " (regexp-quote heading-to-export) "$") nil t)
-              (progn
-                (end-of-line)
-                (delete-region (point) (point-max)))
-            (goto-char (point-max)))
-          (insert markdown-content)
-          (write-region (point-min) (point-max) dest-file))))
+                                 "")))
+        (message "Existing Content:\n%s" existing-content) ; Debug log message
+       (let* ((updated-content (if (string-match (concat "^\\# " (regexp-quote heading-to-export) "$") existing-content)
+                                     (replace-regexp-in-string (concat "^\\# " (regexp-quote heading-to-export) "$") (buffer-string) existing-content)
+                                   (concat existing-content (buffer-string)))))
+          (message "Updated Content:\n%s" updated-content) ; Debug log message
+          (with-temp-file dest-file
+            (insert updated-content)))
+        (org-export-to-file 'md dest-file nil nil nil nil nil)))
     (message "Exported Org heading and content appended to %s" dest-file)))
 
 (after! org
