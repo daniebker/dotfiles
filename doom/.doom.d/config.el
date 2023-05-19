@@ -328,25 +328,36 @@
     (with-temp-buffer
       (insert "* " heading-to-export "\n" entry-content)
       (org-mode)
+      ;; Disable table of contents generation
+      (setq org-export-with-toc nil)
       (let* ((existing-content (if (file-exists-p dest-file)
                                    (with-temp-buffer
                                      (insert-file-contents dest-file)
                                      (buffer-string))
-                                 "")))
-        (message "Existing Content:\n%s" existing-content) ; Debug log message
-       (let* ((updated-content (if (string-match (concat "^\\# " (regexp-quote heading-to-export) "$") existing-content)
-                                     (replace-regexp-in-string (concat "^\\# " (regexp-quote heading-to-export) "$") (buffer-string) existing-content)
-                                   (concat existing-content (buffer-string)))))
-          (message "Updated Content:\n%s" updated-content) ; Debug log message
-          (with-temp-file dest-file
-            (insert updated-content)))
-        (org-export-to-file 'md dest-file nil nil nil nil nil)))
-    (message "Exported Org heading and content appended to %s" dest-file)))
+                                 ""))
+             (markdown-content (org-export-string-as (buffer-substring-no-properties (point-min) (point-max)) 'md t))
+             (new-content (if (string-empty-p existing-content)
+                              markdown-content
+                            (with-temp-buffer
+                              (insert existing-content)
+                              (goto-char (point-min))
+                              (if (search-forward-regexp (concat "^\\# " (regexp-quote heading-to-export) "$") nil t)
+                                  (progn
+                                    (end-of-line)
+                                    (delete-region (point) (point-max)))
+                                (goto-char (point-max)))
+                              (insert markdown-content)
+                              (buffer-string)))))
+        (with-temp-file dest-file
+          (insert new-content)))
+    (message "Exported Org heading and content appended to %s" dest-file))))
 
+;; Bind the function to a keybinding or command
 (after! org
   (map! :map org-mode-map
         :localleader
         :desc "Append heading to file" ">" #'+org/append-heading-to-file))
+
 
 (use-package org-kanban
   :after org)
