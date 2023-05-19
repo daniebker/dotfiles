@@ -309,6 +309,56 @@
         :desc "Stuck projects" "s" #'org-gtd-show-stuck-projects
         :desc "Clarify and finalise" "f" #'org-gtd-clarify-finalize))
 
+(defun +org/append-heading-to-file ()
+  "Export the current Org-mode heading and its content to Markdown format and append it to a file."
+  (interactive)
+  (let* ((org-file (buffer-file-name))
+         (heading (org-get-heading t t t t))
+         (export-heading (org-entry-get nil "EXPORT_HEADING_NAME"))
+         (heading-to-export (if (and export-heading (stringp export-heading) (not (string-empty-p export-heading)))
+                                export-heading
+                              heading))
+         (entry-content (org-get-entry))
+         (export-file (or (org-entry-get nil "EXPORT_FILE_NAME") org-file))
+         (dest-file (if (and export-file (stringp export-file) (not (string-empty-p export-file)))
+                        export-file
+                      (concat (file-name-sans-extension org-file) ".md"))))
+    (when (or (null dest-file) (string-empty-p dest-file))
+      (setq dest-file (concat (file-name-sans-extension org-file) ".md")))
+    (with-temp-buffer
+      (insert "* " heading-to-export "\n" entry-content)
+      (org-mode)
+      (goto-char (point-min))
+      ;; (unless (search-forward-regexp "^Table of Contents" nil t)
+      ;;   (goto-char (point-max))
+      ;;   (insert "\n\n # Table of Contents\n\n<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-ret -->\n<!-- markdown-toc end -->\n\n"))
+      ;; (setq org-export-with-toc nil)  ; Disable table of contents))
+      (let* ((existing-content (if (file-exists-p dest-file)
+                                   (with-temp-buffer
+                                     (insert-file-contents dest-file)
+                                     (buffer-string))
+                                 ""))
+             (markdown-content (org-export-string-as
+                                (buffer-substring-no-properties (point-min) (point-max))
+                                'md
+                                t)))
+        (with-temp-buffer
+          (insert existing-content)
+          (goto-char (point-min))
+          (if (search-forward-regexp (concat "^\\* " (regexp-quote heading-to-export) "$") nil t)
+              (progn
+                (end-of-line)
+                (delete-region (point) (point-max)))
+            (goto-char (point-max)))
+          (insert markdown-content)
+          (write-region (point-min) (point-max) dest-file))))
+    (message "Exported Org heading and content appended to %s" dest-file)))
+
+(after! org
+  (map! :map org-mode-map
+        :localleader
+        :desc "Append heading to file" ">" #'+org/append-heading-to-file))
+
 (use-package org-kanban
   :after org)
 
