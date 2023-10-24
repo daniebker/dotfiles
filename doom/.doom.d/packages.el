@@ -49,10 +49,13 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
+(package! org :recipe
+  (:host github
+   :repo "emacs-straight/org-mode")
+  :pin "652430128896e690dc6ef2a83891a1209094b3da")
 (package! org-gtd)
 (package! org-edna)
 (package! org-ql)
-(package! org-drill)
 (unpin! org-roam)
 (package! websocket)
 (package! org-roam-ui)
@@ -62,4 +65,4 @@
   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
 (package! org-kanban
   :recipe (:host github :repo "gizmomogwai/org-kanban" :files ("*.el")))
-(package! org-caldav)
+(package! exec-path-from-shell)

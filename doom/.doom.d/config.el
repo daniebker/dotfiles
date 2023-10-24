@@ -60,6 +60,8 @@
 (setq doom-theme 'doom-dracula) ;; << This line enables the theme
 
 
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 ;;;;;;;;
 ;; ORG
 ;;;;;;;;
@@ -73,19 +75,12 @@
    '(("d" "default" plain
       "%?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+author: Daniel Baker\n#+hugo_base_dir: ~/src/personal/daniebkerv2\n#+language: en\n#+HUGO_SECTION: garden\n#+DATE: %<%Y-%m-%d_%H:%M:%S>")
+      :unnarrowed t)
+     (
+     "r" "recipe" plain
+      "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+author: Daniel Baker\n#+hugo_base_dir: ~/Documents/Notes/3_Reference/\n#+language: en\n#+HUGO_SECTION: recipes\n#+DATE: %<%Y-%m-%d_%H:%M:%S>")
       :unnarrowed t))
-   ))
-
-(use-package! org-caldav
-  :after org
-  :config
-  (setq
-   org-icalendar-include-todo 'all
-   org-caldav-sync-todo t
-   org-caldav-url "https://caldav.daniebker.co.uk/radicale/dbaker"
-   org-caldav-calendars
-  '((:calendar-id "2bbc543f-450b-6bca-d914-8894ab9a1351" :files ("~/org/watchlater.org")
-     :inbox "~/org/fromwatchlater.org"))
    ))
 
 (require 'org-crypt)
@@ -142,8 +137,8 @@
 (setq display-line-numbers-type 'relative)
 
 ;; TRANSPARENCY
-(set-frame-parameter (selected-frame) 'alpha '(90))
-(add-to-list 'default-frame-alist '(alpha 90))
+(set-frame-parameter (selected-frame) 'alpha '(95))
+(add-to-list 'default-frame-alist '(alpha 95))
 
 (defun on-after-init ()
   (unless (display-graphic-p (selected-frame))
@@ -308,56 +303,6 @@
         :desc "All next actions" "n" #'org-gtd-show-all-next
         :desc "Stuck projects" "s" #'org-gtd-show-stuck-projects
         :desc "Clarify and finalise" "f" #'org-gtd-clarify-finalize))
-
-(defun +org/append-heading-to-file ()
-  "Export the current Org-mode heading and its content to Markdown format and append it to a file."
-  (interactive)
-  (let* ((org-file (buffer-file-name))
-         (heading (org-get-heading t t t t))
-         (export-heading (org-entry-get nil "EXPORT_HEADING_NAME"))
-         (heading-to-export (if (and export-heading (stringp export-heading) (not (string-empty-p export-heading)))
-                                export-heading
-                              heading))
-         (entry-content (org-get-entry))
-         (export-file (or (org-entry-get nil "EXPORT_FILE_NAME") org-file))
-         (dest-file (if (and export-file (stringp export-file) (not (string-empty-p export-file)))
-                        export-file
-                      (concat (file-name-sans-extension org-file) ".md"))))
-    (when (or (null dest-file) (string-empty-p dest-file))
-      (setq dest-file (concat (file-name-sans-extension org-file) ".md")))
-    (with-temp-buffer
-      (insert "* " heading-to-export "\n" entry-content)
-      (org-mode)
-      ;; Disable table of contents generation
-      (setq org-export-with-toc nil)
-      (let* ((existing-content (if (file-exists-p dest-file)
-                                   (with-temp-buffer
-                                     (insert-file-contents dest-file)
-                                     (buffer-string))
-                                 ""))
-             (markdown-content (org-export-string-as (buffer-substring-no-properties (point-min) (point-max)) 'md t))
-             (new-content (if (string-empty-p existing-content)
-                              markdown-content
-                            (with-temp-buffer
-                              (insert existing-content)
-                              (goto-char (point-min))
-                              (if (search-forward-regexp (concat "^\\# " (regexp-quote heading-to-export) "$") nil t)
-                                  (progn
-                                    (end-of-line)
-                                    (delete-region (point) (point-max)))
-                                (goto-char (point-max)))
-                              (insert markdown-content)
-                              (buffer-string)))))
-        (with-temp-file dest-file
-          (insert new-content)))
-    (message "Exported Org heading and content appended to %s" dest-file))))
-
-;; Bind the function to a keybinding or command
-(after! org
-  (map! :map org-mode-map
-        :localleader
-        :desc "Append heading to file" ">" #'+org/append-heading-to-file))
-
 
 (use-package org-kanban
   :after org)
@@ -578,7 +523,7 @@ The total is written to the TALLY_SUM property of this heading"
 
 ;; run an emacs server
 (server-start)
-(setq-hook! 'web-mode-hook +format-with 'prettier)
+;; (setq-hook! 'web-mode-hook +format-with 'prettier)
 
 ;; ;; Hooks
 ;; (defun sync-to-cloud ()
@@ -800,9 +745,9 @@ resourcereport resourceGraph \"\" {
                 :desc "resume chat" "r" #'chatgpt-arcana-resume-chat)))
 
 ;; Copilot
-;; (use-package company-box
-;;   :ensure t
-;;   :hook (company-mode . company-box-mode))
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
 
 ;; accept completion from copilot and fallback to company
 (use-package! copilot

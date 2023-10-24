@@ -53,9 +53,11 @@ yabai -m rule --add app='^Activity Monitor$' manage=off
 yabai -m rule --add app='^Finder$' manage=off
 yabai -m rule --add title='Preferences$' manage=off
 yabai -m rule --add app="^Zoom$" space=10
+yabai -m rule --add app="^Emacs$" manage=on
 yabai -m rule --add app="^Code$" opacity=0.7
 
 # float settings windows
 yabai -m rule --add title='Settings$' manage=off
+yabai -m rule --add title='rogue_like$' manage=off
 
 echo "yabai configuration loaded.."
